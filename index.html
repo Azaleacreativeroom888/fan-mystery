@@ -2,38 +2,499 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ミステリー小説非公式ファンサイト</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Violet Question — ミステリーファンサイト</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+JP:wght@300;400;600&family=Courier+Prime&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: "メイリオ", sans-serif;
-      background: whote;
-      background-attachment: fixed;
-      color: black;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #EDE8F5;
+      --bg-card:   #F5F0FF;
+      --main:      #C9B8E8;
+      --mid:       #8B6BB1;
+      --deep:      #2D1B4E;
+      --ink:       #3D2B5E;
+      --muted:     #9A87B8;
+      --accent:    #D4A9FF;
     }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      line-height: 1.8;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      overflow: hidden;
+      background: var(--deep);
+      padding: 3.5rem 2rem 4rem;
+      text-align: center;
+    }
+
+    /* 浮遊する？マーク */
+    .q-field {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .q {
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      color: rgba(201, 184, 232, 0.12);
+      font-style: italic;
+      user-select: none;
+      animation: floatQ var(--dur, 8s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+    @keyframes floatQ {
+      0%   { transform: translateY(0)   rotate(var(--rot0, -5deg)); opacity: 0.08; }
+      50%  { transform: translateY(-18px) rotate(var(--rot1, 8deg));  opacity: 0.18; }
+      100% { transform: translateY(0)   rotate(var(--rot0, -5deg)); opacity: 0.08; }
+    }
+
+    .site-eyebrow {
+      font-family: 'Courier Prime', monospace;
+      color: var(--main);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 1.1rem;
+      opacity: 0.85;
+    }
+
+    .site-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      line-height: 1.1;
+    }
+    .site-title span {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .site-tagline {
+      margin-top: 1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--deep);
+      border-top: 1px solid rgba(201,184,232,0.15);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+    }
+    nav a {
+      color: var(--main);
+      text-decoration: none;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 1.6rem;
+      transition: color 0.2s, background 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+    nav a:hover, nav a.active {
+      color: #fff;
+      border-bottom-color: var(--accent);
+      background: rgba(201,184,232,0.06);
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* ── HERO QUOTE ── */
+    .hero-quote {
+      background: var(--deep);
+      color: #fff;
+      border-left: 4px solid var(--accent);
+      padding: 2rem 2.2rem;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    .hero-quote::before {
+      content: '？';
+      position: absolute;
+      right: 1.5rem;
+      top: 0.8rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      color: rgba(212,169,255,0.15);
+      font-style: italic;
+      line-height: 1;
+    }
+    .hero-quote p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      line-height: 1.7;
+      color: #E8E0F5;
+    }
+    .hero-quote cite {
+      display: block;
+      margin-top: 0.8rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      font-style: normal;
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--deep);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 1.5rem;
+    }
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 2px;
+      background: var(--mid);
+      flex-shrink: 0;
+    }
+
+    /* ── GRID ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    @media (max-width: 640px) {
+      .two-col { grid-template-columns: 1fr; }
+      nav { flex-wrap: wrap; }
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid rgba(139,107,177,0.2);
+      padding: 1.5rem;
+      position: relative;
+    }
+    .card:hover {
+      border-color: var(--mid);
+      box-shadow: 0 4px 20px rgba(45,27,78,0.08);
+    }
+    .card-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.5rem;
+    }
+    .card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--deep);
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+    .card p {
+      font-size: 0.82rem;
+      color: var(--ink);
+      opacity: 0.8;
+      line-height: 1.7;
+    }
+    .card-date {
+      margin-top: 0.8rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── BLOG FEED ── */
+    .blog-list { display: flex; flex-direction: column; gap: 0; }
+    .blog-item {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 0 1.2rem;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid rgba(139,107,177,0.15);
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .blog-item:first-child { border-top: 1px solid rgba(139,107,177,0.15); }
+    .blog-item:hover { background: rgba(201,184,232,0.1); padding-left: 0.5rem; }
+    .blog-date {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      padding-top: 0.2rem;
+      flex-shrink: 0;
+    }
+    .blog-title {
+      font-size: 0.88rem;
+      color: var(--deep);
+      line-height: 1.6;
+    }
+    .blog-tag {
+      display: inline-block;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      background: rgba(139,107,177,0.12);
+      color: var(--mid);
+      padding: 0.1em 0.6em;
+      letter-spacing: 0.1em;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    /* ── RANKING PREVIEW ── */
+    .rank-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .rank-item {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px dashed rgba(139,107,177,0.2);
+    }
+    .rank-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: rgba(139,107,177,0.3);
+      line-height: 1;
+      flex-shrink: 0;
+      width: 2rem;
+    }
+    .rank-item:first-child .rank-num { color: var(--mid); }
+    .rank-info { flex: 1; }
+    .rank-title {
+      font-size: 0.88rem;
+      color: var(--deep);
+      font-weight: 400;
+    }
+    .rank-author {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── ABOUT STRIP ── */
+    .about-strip {
+      background: var(--deep);
+      color: #fff;
+      padding: 2.2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .about-q {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      font-style: italic;
+      color: var(--accent);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .about-text p {
+      font-size: 0.85rem;
+      color: rgba(232,224,245,0.85);
+      line-height: 1.8;
+    }
+    .about-text a {
+      display: inline-block;
+      margin-top: 0.8rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(212,169,255,0.4);
+      padding-bottom: 0.1em;
+    }
+
+    /* ── MORE LINK ── */
+    .more-link {
+      display: block;
+      text-align: right;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      margin-top: 1rem;
+    }
+    .more-link:hover { color: var(--deep); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep);
+      color: var(--muted);
+      text-align: center;
+      padding: 2rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+    }
+    footer a { color: var(--main); text-decoration: none; }
   </style>
 </head>
 <body>
-  <h1>ミステリー小説が好き</h1>
 
-  <p>
-    ※このサイトは『ミステリー小説』の非公式ファンサイトです。
-    原作者・出版社・公式とは一切関係ありません。
-  </p>
+<!-- HEADER -->
+<header>
+  <div class="q-field" aria-hidden="true">
+    <span class="q" style="font-size:6rem; left:5%; top:10%; --dur:9s; --delay:0s; --rot0:-8deg; --rot1:4deg;">？</span>
+    <span class="q" style="font-size:3.5rem; left:18%; top:55%; --dur:7s; --delay:1.2s; --rot0:5deg; --rot1:-6deg;">?</span>
+    <span class="q" style="font-size:9rem; left:70%; top:5%; --dur:11s; --delay:0.5s; --rot0:3deg; --rot1:-10deg;">？</span>
+    <span class="q" style="font-size:4.5rem; left:82%; top:50%; --dur:8s; --delay:2s; --rot0:-4deg; --rot1:9deg;">?</span>
+    <span class="q" style="font-size:2.5rem; left:42%; top:60%; --dur:6s; --delay:0.8s; --rot0:10deg; --rot1:-3deg;">？</span>
+    <span class="q" style="font-size:7rem; left:55%; top:30%; --dur:12s; --delay:1.5s; --rot0:-2deg; --rot1:6deg;">?</span>
+    <span class="q" style="font-size:5rem; left:30%; top:20%; --dur:10s; --delay:3s; --rot0:7deg; --rot1:-5deg;">？</span>
+  </div>
 
-  <h2>このサイトについて</h2>
-  <p>
-    このサイトは、二次創作などのファン作品を自由に楽しむための場所です。原作・公式とは関係のない非公式サイトです。個人によるファン活動として運営しています。二次創作にご理解のある方にお楽しみいただければ幸いです。
-  </p>
+  <p class="site-eyebrow">Mystery Fan Site</p>
+  <h1 class="site-title">The <span>Violet</span> Question</h1>
+  <p class="site-tagline">謎を愛する者たちのための場所</p>
+</header>
 
-  <h2>最初の記事</h2>
-  <ul>
-    <li><a href="thedecagonhousemurders.html">十角館の殺人</a></li>
-  </ul>
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="active">Home</a>
+  <a href="blog.html">Blog</a>
+  <a href="ranking.html">Ranking</a>
 
-  <p>注意：当サイトに掲載されている画像・文章・作品について、AI学習への利用、トレース（トレパク）、無断転載・転載、二次利用を禁止します。当サイト内の作品・文章について、スクリーンショットの転載は禁止および無断引用はご遠慮ください。</p>
-  <p>Notice:Please refrain from using any images, text, or works on this website for AI training, tracing, unauthorized reproduction, redistribution, or secondary use. Screenshots and unauthorized quotations of the content on this website are not allowed.</p>
-  
+  <a href="about.html">About</a>
+</nav>
+
+<!-- MAIN -->
+<main class="container">
+
+  <!-- HERO QUOTE -->
+  <blockquote class="hero-quote">
+    <p>「真実はいつもひとつ。<br>だが、その道は霧に包まれている。」</p>
+    <cite>— SITE MOTTO</cite>
+  </blockquote>
+
+  <!-- RECENT POSTS + RANKING PREVIEW -->
+  <div class="two-col">
+
+    <!-- 最新記事 -->
+    <section>
+      <h2 class="section-title">最新記事</h2>
+      <div class="blog-list">
+        <a class="blog-item" href="blog.html">
+          <span class="blog-date">2026.06.25</span>
+          <span class="blog-title">『名探偵コナン』最新話の伏線を考察する<span class="blog-tag">考察</span></span>
+        </a>
+        <a class="blog-item" href="blog.html">
+          <span class="blog-date">2026.06.20</span>
+          <span class="blog-title">古典ミステリの魅力——アガサ・クリスティを再読して<span class="blog-tag">レビュー</span></span>
+        </a>
+        <a class="blog-item" href="blog.html">
+          <span class="blog-date">2026.06.14</span>
+          <span class="blog-title">密室トリックの歴史をたどる<span class="blog-tag">コラム</span></span>
+        </a>
+        <a class="blog-item" href="blog.html">
+          <span class="blog-date">2026.06.08</span>
+          <span class="blog-title">『カラマーゾフの兄弟』とミステリ的構造<span class="blog-tag">考察</span></span>
+        </a>
+        <a class="blog-item" href="blog.html">
+          <span class="blog-date">2026.06.01</span>
+          <span class="blog-title">国内ミステリ新刊まとめ【2026年6月】<span class="blog-tag">まとめ</span></span>
+        </a>
+      </div>
+      <a class="more-link" href="blog.html">すべての記事を見る →</a>
+    </section>
+
+    <!-- RANKING PREVIEW -->
+    <section>
+      <h2 class="section-title">お気に入りランキング</h2>
+      <div class="rank-list">
+        <div class="rank-item">
+          <span class="rank-num">1</span>
+          <div class="rank-info">
+            <div class="rank-title">シャーロック・ホームズの冒険</div>
+            <div class="rank-author">Arthur Conan Doyle</div>
+          </div>
+        </div>
+        <div class="rank-item">
+          <span class="rank-num">2</span>
+          <div class="rank-info">
+            <div class="rank-title">そして誰もいなくなった</div>
+            <div class="rank-author">Agatha Christie</div>
+          </div>
+        </div>
+        <div class="rank-item">
+          <span class="rank-num">3</span>
+          <div class="rank-info">
+            <div class="rank-title">十角館の殺人</div>
+            <div class="rank-author">綾辻行人</div>
+          </div>
+        </div>
+        <div class="rank-item">
+          <span class="rank-num">4</span>
+          <div class="rank-info">
+            <div class="rank-title">名探偵コナン</div>
+            <div class="rank-author">青山剛昌</div>
+          </div>
+        </div>
+        <div class="rank-item">
+          <span class="rank-num">5</span>
+          <div class="rank-info">
+            <div class="rank-title">火刑法廷</div>
+            <div class="rank-author">John Dickson Carr</div>
+          </div>
+        </div>
+      </div>
+      <a class="more-link" href="ranking.html">全ランキングを見る →</a>
+    </section>
+
+  </div>
+
+  <!-- ABOUT STRIP -->
+  <div class="about-strip">
+    <div class="about-q" aria-hidden="true">？</div>
+    <div class="about-text">
+      <p>このサイトは、ミステリー小説・漫画・映像作品を愛するひとりのファンが運営する非公式ファンサイトです。考察・感想・二次創作イラストを中心にゆっくりと更新しています。</p>
+      <a href="about.html">About this site →</a>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 The Violet Question &nbsp;|&nbsp; <a href="about.html">About</a> &nbsp;|&nbsp; Fan Site — 非公式</p>
+  <p style="margin-top:0.4rem; opacity:0.6;">当サイトのオリジナルコンテンツのAI学習利用を禁止します。</p>
+</footer>
+
 </body>
 </html>
