@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — The Violet Question</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Noto+Serif+JP:wght@300;400&family=Courier+Prime&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #EDE8F5;
+      --bg-card: #F5F0FF;
+      --main:    #C9B8E8;
+      --mid:     #8B6BB1;
+      --deep:    #2D1B4E;
+      --ink:     #3D2B5E;
+      --muted:   #9A87B8;
+      --accent:  #D4A9FF;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      line-height: 1.9;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--deep);
+      padding: 2.2rem 2rem;
+      text-align: center;
+    }
+    .site-eyebrow {
+      font-family: 'Courier Prime', monospace;
+      color: var(--main);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .site-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .site-title span { color: var(--accent); font-style: italic; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--deep);
+      border-top: 1px solid rgba(201,184,232,0.15);
+      display: flex;
+      justify-content: center;
+    }
+    nav a {
+      color: var(--main);
+      text-decoration: none;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 1.6rem;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, background 0.2s;
+    }
+    nav a:hover, nav a.active {
+      color: #fff;
+      border-bottom-color: var(--accent);
+      background: rgba(201,184,232,0.06);
+    }
+
+    /* ── PAGE TITLE ── */
+    .page-heading {
+      max-width: 720px;
+      margin: 2.8rem auto 2.2rem;
+      padding: 0 1.5rem;
+    }
+    .page-heading h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: var(--deep);
+      font-weight: 400;
+    }
+    .page-heading .rule {
+      margin-top: 0.6rem;
+      height: 1px;
+      background: linear-gradient(to right, var(--mid), transparent);
+    }
+
+    /* ── DIARY FEED ── */
+    .diary {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    .entry {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 0 1.8rem;
+      padding: 1.4rem 0;
+      border-bottom: 1px solid rgba(139,107,177,0.18);
+    }
+    .entry:first-child { border-top: 1px solid rgba(139,107,177,0.18); }
+
+    .entry-date {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      padding-top: 0.25rem;
+      line-height: 1.6;
+    }
+
+    .entry-body {
+      font-size: 0.88rem;
+      color: var(--ink);
+      line-height: 1.9;
+    }
+
+    @media (max-width: 500px) {
+      .entry { grid-template-columns: 1fr; gap: 0.3rem 0; }
+      nav { flex-wrap: wrap; }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep);
+      color: var(--muted);
+      text-align: center;
+      padding: 2rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+    }
+    footer a { color: var(--main); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="site-eyebrow">Mystery Fan Site</p>
+  <h1 class="site-title">The <span>Violet</span> Question</h1>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="blog.html" class="active">Blog</a>
+  <a href="ranking.html">Ranking</a>
+  <a href="about.html">About</a>
+</nav>
+
+<div class="page-heading">
+  <h2>Blog</h2>
+  <div class="rule"></div>
+</div>
+
+<div class="diary">
+
+  <div class="entry">
+    <div class="entry-date">2026.06.25</div>
+    <div class="entry-body">『名探偵コナン』の最新話を読んだ。黒の組織の伏線がまた一枚めくれた感じがして、久しぶりにわくわくした。あの描写は絶対に後の展開に繋がってくると思う。</div>
+  </div>
+
+  <div class="entry">
+    <div class="entry-date">2026.06.20</div>
+    <div class="entry-body">アガサ・クリスティの『そして誰もいなくなった』を再読。何度読んでも最後の手紙の場面で鳥肌が立つ。これだけ読み返しても驚きが薄れないのはすごいことだと思う。</div>
+  </div>
+
+  <div class="entry">
+    <div class="entry-date">2026.06.14</div>
+    <div class="entry-body">密室トリックの歴史について調べていた。ジョン・ディクスン・カーがいかに多くの作家に影響を与えたか、改めて実感する。「不可能犯罪」という概念を定着させた功績は大きい。</div>
+  </div>
+
+  <div class="entry">
+    <div class="entry-date">2026.06.08</div>
+    <div class="entry-body">『カラマーゾフの兄弟』を読み進めながら、ミステリ的な構造を持つ作品だなと感じた。犯人は誰か、という問いが物語全体を貫いている。ドストエフスキーはやはり深い。</div>
+  </div>
+
+  <div class="entry">
+    <div class="entry-date">2026.06.01</div>
+    <div class="entry-body">6月に読みたい本のリストを作った。国内ミステリの新刊が多くて、どれから手をつけるか迷っている。とりあえず積読を崩すところから始めないといけない。</div>
+  </div>
+
+  <div class="entry">
+    <div class="entry-date">2026.05.24</div>
+    <div class="entry-body">ホームズシリーズの「赤毛組合」を久々に読んだ。トリックの発想がシンプルで鮮やかで、こういう話がやっぱり好きだなと思う。ワトソンの語りも心地よい。</div>
+  </div>
+
+  <div class="entry">
+    <div class="entry-date">2026.05.17</div>
+    <div class="entry-body">綾辻行人の『十角館の殺人』を初めて読んだ友人から感想を聞いた。あの一行の衝撃は初読でしか味わえないから、羨ましくなった。</div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 The Violet Question &nbsp;|&nbsp; <a href="about.html">About</a> &nbsp;|&nbsp; Fan Site — 非公式</p>
+  <p style="margin-top:0.4rem; opacity:0.6;">当サイトのオリジナルコンテンツのAI学習利用を禁止します。</p>
+</footer>
+
+</body>
+</html>
