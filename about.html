@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — The Violet Question</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Noto+Serif+JP:wght@300;400&family=Courier+Prime&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #EDE8F5;
+      --bg-card: #F5F0FF;
+      --main:    #C9B8E8;
+      --mid:     #8B6BB1;
+      --deep:    #2D1B4E;
+      --ink:     #3D2B5E;
+      --muted:   #9A87B8;
+      --accent:  #D4A9FF;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      line-height: 1.9;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--deep);
+      padding: 2.2rem 2rem;
+      text-align: center;
+    }
+    .site-eyebrow {
+      font-family: 'Courier Prime', monospace;
+      color: var(--main);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .site-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .site-title span { color: var(--accent); font-style: italic; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--deep);
+      border-top: 1px solid rgba(201,184,232,0.15);
+      display: flex;
+      justify-content: center;
+    }
+    nav a {
+      color: var(--main);
+      text-decoration: none;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 1.6rem;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, background 0.2s;
+    }
+    nav a:hover, nav a.active {
+      color: #fff;
+      border-bottom-color: var(--accent);
+      background: rgba(201,184,232,0.06);
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2.8rem 1.5rem 4rem;
+    }
+
+    /* ── PAGE HEADING ── */
+    .page-heading {
+      margin-bottom: 2.5rem;
+    }
+    .page-heading h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: var(--deep);
+      font-weight: 400;
+    }
+    .rule {
+      margin-top: 0.7rem;
+      height: 1px;
+      background: linear-gradient(to right, var(--mid), transparent);
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(139,107,177,0.3), transparent);
+    }
+
+    /* ── INTRO CARD ── */
+    .intro-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(139,107,177,0.2);
+      border-left: 3px solid var(--mid);
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 2.5rem;
+      font-size: 0.88rem;
+      line-height: 2;
+      color: var(--ink);
+    }
+    .intro-card p + p {
+      margin-top: 0.8rem;
+    }
+
+    /* ── LINK GRID ── */
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 10px;
+      margin-bottom: 2.5rem;
+    }
+
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      background: var(--bg-card);
+      border: 1px solid rgba(139,107,177,0.18);
+      padding: 1rem 1.1rem;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      position: relative;
+    }
+    .link-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--mid), transparent);
+    }
+    .link-card:hover {
+      border-color: var(--mid);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(45,27,78,0.08);
+    }
+
+    .link-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      width: 2.4rem;
+      height: 2.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(139,107,177,0.08);
+      border: 1px solid rgba(139,107,177,0.15);
+    }
+
+    .link-text { flex: 1; min-width: 0; }
+    .link-name {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--deep);
+      margin-bottom: 0.1rem;
+    }
+    .link-desc {
+      display: block;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .link-arrow {
+      color: rgba(139,107,177,0.35);
+      font-size: 1.1rem;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .link-card:hover .link-arrow {
+      color: var(--mid);
+      transform: translateX(3px);
+    }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(139,107,177,0.2);
+      border-left: 3px solid var(--mid);
+      padding: 1.8rem 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-intro {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    .form-group { margin-bottom: 1.1rem; }
+
+    .form-label {
+      display: block;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.4rem;
+    }
+    .required { color: #a06080; }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      background: rgba(237,232,245,0.6);
+      border: 1px solid rgba(139,107,177,0.25);
+      color: var(--ink);
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.85rem;
+      font-weight: 300;
+      padding: 0.6rem 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: var(--muted); opacity: 0.6; }
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--mid);
+      box-shadow: 0 0 0 2px rgba(139,107,177,0.1);
+    }
+    .form-textarea { resize: vertical; min-height: 130px; }
+
+    .field-error {
+      display: block;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      color: #a06080;
+      margin-top: 0.3rem;
+    }
+
+    .form-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--deep);
+      border: 1px solid rgba(201,184,232,0.3);
+      color: var(--main);
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.7rem 1.6rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .form-submit:hover {
+      background: var(--mid);
+      color: #fff;
+      border-color: var(--mid);
+    }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .form-success {
+      background: rgba(45,27,78,0.08);
+      border: 1px solid rgba(139,107,177,0.3);
+      padding: 1rem 1.2rem;
+      text-align: center;
+      color: var(--deep);
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .form-error-global {
+      background: rgba(160,96,128,0.08);
+      border: 1px solid rgba(160,96,128,0.3);
+      padding: 0.8rem 1rem;
+      color: #a06080;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    @media (max-width: 500px) {
+      nav { flex-wrap: wrap; }
+      .link-grid { grid-template-columns: 1fr; }
+      .form-card { padding: 1.3rem 1.2rem; }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep);
+      color: var(--muted);
+      text-align: center;
+      padding: 2rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      line-height: 2;
+    }
+    footer a { color: var(--main); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="site-eyebrow">Mystery Fan Site</p>
+  <h1 class="site-title">The <span>Violet</span> Question</h1>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="blog.html">Blog</a>
+  <a href="ranking.html">Ranking</a>
+  <a href="about.html" class="active">About</a>
+</nav>
+
+<main>
+
+  <div class="page-heading">
+    <h2>About</h2>
+    <div class="rule"></div>
+  </div>
+
+  <!-- 自己紹介 -->
+  <p class="section-label">このサイトについて</p>
+  <div class="intro-card">
+    <p>ミステリー小説・漫画・映像作品が好きなひとりのファンが運営する非公式ファンサイトです。</p>
+    <p>古典から現代まで、国内外を問わず謎と推理の世界を楽しんでいます。作品の考察・感想・ランキングをゆっくりと更新していきます。</p>
+    <p>掲載しているコンテンツはすべて個人の感想です。各作品・権利者とは一切関係ありません。</p>
+  </div>
+
+  <!-- リンク -->
+  <p class="section-label">関連サイト</p>
+  <div class="link-grid">
+
+    <a class="link-card" href="https://azaleacreativeroom888.github.io/" target="_blank" rel="noopener">
+      <div class="link-icon">🌿</div>
+      <div class="link-text">
+        <span class="link-name">Azalea Creative Room</span>
+        <span class="link-desc">管理人のメインサイト</span>
+      </div>
+      <span class="link-arrow">›</span>
+    </a>
+
+    <a class="link-card" href="https://www.pixiv.net/users/105728284" target="_blank" rel="noopener">
+      <div class="link-icon">🎨</div>
+      <div class="link-text">
+        <span class="link-name">Pixiv</span>
+        <span class="link-desc">イラスト・二次創作</span>
+      </div>
+      <span class="link-arrow">›</span>
+    </a>
+
+    <a class="link-card" href="https://bsky.app/profile/azaleaazalea88.bsky.social" target="_blank" rel="noopener">
+      <div class="link-icon">🦋</div>
+      <div class="link-text">
+        <span class="link-name">Bluesky</span>
+        <span class="link-desc">近況・お知らせ</span>
+      </div>
+      <span class="link-arrow">›</span>
+    </a>
+
+  </div>
+
+  <!-- お問い合わせ -->
+  <p class="section-label">お問い合わせ</p>
+  <div class="form-card">
+    <p class="form-intro">ご感想・ご質問などはこちらからどうぞ。</p>
+
+    <div data-fs-success class="form-success">
+      メッセージを送信しました。ありがとうございます！
+    </div>
+    <div data-fs-error class="form-error-global"></div>
+
+    <form id="contact-form" action="https://formspree.io/f/maqvpvoz" method="POST">
+
+      <div class="form-group">
+        <label class="form-label" for="name">お名前</label>
+        <input class="form-input" type="text" id="name" name="name" placeholder="匿名可">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">メールアドレス <span class="required">*</span></label>
+        <input class="form-input" type="email" id="email" name="email" data-fs-field placeholder="example@email.com" required>
+        <span data-fs-error="email" class="field-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="message">メッセージ <span class="required">*</span></label>
+        <textarea class="form-textarea" id="message" name="message" data-fs-field placeholder="メッセージを入力してください…" rows="6" required></textarea>
+        <span data-fs-error="message" class="field-error"></span>
+      </div>
+
+      <button class="form-submit" type="submit" data-fs-submit-btn>送信する</button>
+
+    </form>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 The Violet Question &nbsp;|&nbsp; Fan Site — 非公式</p>
+  <p>当サイトのオリジナルコンテンツのAI学習利用を禁止します。</p>
+  <p>当サイトに掲載されている文章・作品の無断転載・二次利用を禁止します。</p>
+</footer>
+
+<script>
+  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+  formspree('initForm', { formElement: '#contact-form', formId: 'maqvpvoz' });
+</script>
+<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
+</body>
+</html>
