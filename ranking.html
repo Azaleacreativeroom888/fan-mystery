@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ranking — The Violet Question</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Noto+Serif+JP:wght@300;400&family=Courier+Prime&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #EDE8F5;
+      --bg-card: #F5F0FF;
+      --main:    #C9B8E8;
+      --mid:     #8B6BB1;
+      --deep:    #2D1B4E;
+      --ink:     #3D2B5E;
+      --muted:   #9A87B8;
+      --accent:  #D4A9FF;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      line-height: 1.9;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--deep);
+      padding: 2.2rem 2rem;
+      text-align: center;
+    }
+    .site-eyebrow {
+      font-family: 'Courier Prime', monospace;
+      color: var(--main);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .site-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .site-title span { color: var(--accent); font-style: italic; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--deep);
+      border-top: 1px solid rgba(201,184,232,0.15);
+      display: flex;
+      justify-content: center;
+    }
+    nav a {
+      color: var(--main);
+      text-decoration: none;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 1.6rem;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, background 0.2s;
+    }
+    nav a:hover, nav a.active {
+      color: #fff;
+      border-bottom-color: var(--accent);
+      background: rgba(201,184,232,0.06);
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2.8rem 1.5rem 4rem;
+    }
+
+    /* ── PAGE HEADING ── */
+    .page-heading {
+      margin-bottom: 2rem;
+    }
+    .page-heading h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: var(--deep);
+      font-weight: 400;
+    }
+    .page-heading .note {
+      margin-top: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: 'Courier Prime', monospace;
+      letter-spacing: 0.05em;
+    }
+    .page-heading .rule {
+      margin-top: 0.7rem;
+      height: 1px;
+      background: linear-gradient(to right, var(--mid), transparent);
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 1rem;
+    }
+
+    /* ── TOP CARDS ── */
+    .top-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 2.5rem;
+    }
+
+    .top-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(139,107,177,0.2);
+      padding: 1.1rem 1.3rem;
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .top-card:hover {
+      border-color: var(--mid);
+      box-shadow: 0 4px 16px rgba(45,27,78,0.07);
+    }
+
+    .rank-badge {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 2rem;
+      padding-top: 0.15rem;
+      color: rgba(139,107,177,0.35);
+    }
+    .rank-badge.top { color: var(--mid); }
+
+    .top-card-body { flex: 1; }
+
+    .genre-tag {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      background: rgba(139,107,177,0.1);
+      padding: 0.1em 0.6em;
+      display: inline-block;
+      margin-bottom: 0.35rem;
+    }
+
+    .top-card-title {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--deep);
+      margin-bottom: 0.35rem;
+      line-height: 1.5;
+    }
+
+    .top-card-text {
+      font-size: 0.8rem;
+      color: var(--ink);
+      opacity: 0.8;
+      line-height: 1.8;
+    }
+
+    /* ── REVIEW LIST ── */
+    .review-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 2rem;
+    }
+
+    .review-item {
+      padding: 0.85rem 0;
+      border-bottom: 1px solid rgba(139,107,177,0.15);
+    }
+    .review-item:first-child { border-top: 1px solid rgba(139,107,177,0.15); }
+
+    .review-title {
+      font-size: 0.85rem;
+      color: var(--deep);
+      margin-bottom: 0.15rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .review-text {
+      font-size: 0.78rem;
+      color: var(--ink);
+      opacity: 0.75;
+      line-height: 1.8;
+    }
+
+    /* ── OMISSION NOTE ── */
+    .omission-note {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      border-top: 1px dashed rgba(139,107,177,0.3);
+      border-bottom: 1px dashed rgba(139,107,177,0.3);
+      padding: 0.6rem 0;
+      margin: 0.5rem 0;
+    }
+
+    @media (max-width: 500px) {
+      nav { flex-wrap: wrap; }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep);
+      color: var(--muted);
+      text-align: center;
+      padding: 2rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+    }
+    footer a { color: var(--main); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="site-eyebrow">Mystery Fan Site</p>
+  <h1 class="site-title">The <span>Violet</span> Question</h1>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="blog.html">Blog</a>
+  <a href="ranking.html" class="active">Ranking</a>
+  <a href="about.html">About</a>
+</nav>
+
+<main>
+
+  <div class="page-heading">
+    <h2>Ranking</h2>
+    <p class="note">備忘録。ネタバレを含みます。ランキングは随時変動します。</p>
+    <div class="rule"></div>
+  </div>
+
+  <!-- TOP 5 -->
+  <p class="section-label">Top 5</p>
+  <div class="top-list">
+
+    <div class="top-card">
+      <div class="rank-badge top">1</div>
+      <div class="top-card-body">
+        <span class="genre-tag">小説</span>
+        <div class="top-card-title">シャーロック・ホームズの冒険</div>
+        <div class="top-card-text">作品タイトル</div>
+      </div>
+    </div>
+
+    <div class="top-card">
+      <div class="rank-badge top">2</div>
+      <div class="top-card-body">
+        <span class="genre-tag">小説</span>
+        <div class="top-card-title">そして誰もいなくなった</div>
+        <div class="top-card-text">作品タイトル</div>
+      </div>
+    </div>
+
+    <div class="top-card">
+      <div class="rank-badge top">3</div>
+      <div class="top-card-body">
+        <span class="genre-tag">小説</span>
+        <div class="top-card-title">十角館の殺人</div>
+        <div class="top-card-text">作品タイトル</div>
+      </div>
+    </div>
+
+    <div class="top-card">
+      <div class="rank-badge">4</div>
+      <div class="top-card-body">
+        <span class="genre-tag">漫画</span>
+        <div class="top-card-title">名探偵コナン</div>
+        <div class="top-card-text">作品タイトル</div>
+      </div>
+    </div>
+
+    <div class="top-card">
+      <div class="rank-badge">5</div>
+      <div class="top-card-body">
+        <span class="genre-tag">小説</span>
+        <div class="top-card-title">火刑法廷</div>
+        <div class="top-card-text">作品タイトル</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ALL LIST -->
+  <p class="section-label">All Reviews</p>
+  <div class="review-list">
+
+    <div class="review-item">
+      <div class="review-title">作品タイトル <span class="genre-tag">ジャンル</span></div>
+      <div class="review-text">コメント</div>
+    </div>
+
+    <div class="review-item">
+      <div class="review-title">作品タイトル <span class="genre-tag">ジャンル</span></div>
+      <div class="review-text">コメント</div>
+    </div>
+
+    <div class="review-item">
+      <div class="review-title">作品タイトル <span class="genre-tag">ジャンル</span></div>
+      <div class="review-text">コメント</div>
+    </div>
+
+    <div class="omission-note">// 以下、感想は割愛</div>
+
+    <div class="review-item">
+      <div class="review-title">作品タイトル <span class="genre-tag">ジャンル</span></div>
+    </div>
+
+    <div class="review-item">
+      <div class="review-title">作品タイトル <span class="genre-tag">ジャンル</span></div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 The Violet Question &nbsp;|&nbsp; <a href="about.html">About</a> &nbsp;|&nbsp; Fan Site — 非公式</p>
+  <p style="margin-top:0.4rem; opacity:0.6;">当サイトのオリジナルコンテンツのAI学習利用を禁止します。</p>
+</footer>
+
+</body>
+</html>
