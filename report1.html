@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小説を読む — The Violet Question</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Noto+Serif+JP:wght@300;400&family=Courier+Prime&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #EDE8F5;
+      --bg-card: #F5F0FF;
+      --main:    #C9B8E8;
+      --mid:     #8B6BB1;
+      --deep:    #2D1B4E;
+      --ink:     #3D2B5E;
+      --muted:   #9A87B8;
+      --accent:  #D4A9FF;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      line-height: 1.9;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--deep);
+      padding: 2.2rem 2rem;
+      text-align: center;
+    }
+    .site-eyebrow {
+      font-family: 'Courier Prime', monospace;
+      color: var(--main);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .site-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .site-title span { color: var(--accent); font-style: italic; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--deep);
+      border-top: 1px solid rgba(201,184,232,0.15);
+      display: flex;
+      justify-content: center;
+    }
+    nav a {
+      color: var(--main);
+      text-decoration: none;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 1.6rem;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, background 0.2s;
+    }
+    nav a:hover, nav a.active {
+      color: #fff;
+      border-bottom-color: var(--accent);
+      background: rgba(201,184,232,0.06);
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2.8rem 1.5rem 4rem;
+    }
+
+    /* ── PAGE HEADING ── */
+    .page-heading {
+      margin-bottom: 0.8rem;
+    }
+    .page-heading h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: var(--deep);
+      font-weight: 400;
+    }
+    .page-heading .sub {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-top: 0.3rem;
+    }
+    .rule {
+      margin-top: 0.7rem;
+      height: 1px;
+      background: linear-gradient(to right, var(--mid), transparent);
+      margin-bottom: 2rem;
+    }
+
+    /* ── NOVEL LIST ── */
+    .novel-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .novel-card {
+      display: flex;
+      align-items: stretch;
+      text-decoration: none;
+      background: var(--bg-card);
+      border: 1px solid rgba(139,107,177,0.2);
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      position: relative;
+    }
+    .novel-card:hover {
+      border-color: var(--mid);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 18px rgba(45,27,78,0.09);
+    }
+
+    /* 左の縦帯 */
+    .novel-spine {
+      width: 6px;
+      background: linear-gradient(180deg, var(--mid), var(--accent));
+      flex-shrink: 0;
+    }
+
+    .novel-body {
+      padding: 1.1rem 1.3rem;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .novel-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: rgba(139,107,177,0.2);
+      line-height: 1;
+      flex-shrink: 0;
+      width: 2.5rem;
+    }
+
+    .novel-info { flex: 1; }
+
+    .novel-tag {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      background: rgba(139,107,177,0.1);
+      padding: 0.1em 0.55em;
+      display: inline-block;
+      margin-bottom: 0.35rem;
+    }
+
+    .novel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--deep);
+      line-height: 1.4;
+      margin-bottom: 0.2rem;
+    }
+
+    .novel-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .novel-arrow {
+      font-size: 1.3rem;
+      color: rgba(139,107,177,0.3);
+      flex-shrink: 0;
+      transition: color 0.2s, transform 0.2s;
+      align-self: center;
+      padding-right: 0.5rem;
+    }
+    .novel-card:hover .novel-arrow {
+      color: var(--mid);
+      transform: translateX(4px);
+    }
+
+    /* 準備中カード */
+    .novel-card.soon {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+    .novel-card.soon .novel-spine {
+      background: rgba(139,107,177,0.25);
+    }
+    .soon-badge {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      border: 1px solid rgba(139,107,177,0.25);
+      padding: 0.1em 0.55em;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    /* ── BACK LINK ── */
+    .back-link {
+      display: inline-block;
+      margin-top: 2.5rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(139,107,177,0.3);
+      padding-bottom: 0.1em;
+    }
+    .back-link:hover { color: var(--deep); border-bottom-color: var(--deep); }
+
+    @media (max-width: 500px) {
+      nav { flex-wrap: wrap; }
+      .novel-num { display: none; }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep);
+      color: var(--muted);
+      text-align: center;
+      padding: 2rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      line-height: 2;
+    }
+    footer a { color: var(--main); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="site-eyebrow">Mystery Fan Site</p>
+  <h1 class="site-title">The <span>Violet</span> Question</h1>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="blog.html">Blog</a>
+  <a href="ranking.html">Ranking</a>
+  <a href="gallery.html" class="active">Gallery</a>
+  <a href="about.html">About</a>
+</nav>
+
+<main>
+  <div class="page-heading">
+    <h2>小説を読む</h2>
+    <p class="sub">オリジナル・二次創作の小説一覧</p>
+    <div class="rule"></div>
+  </div>
+
+  <div class="novel-list">
+
+    <a class="novel-card" href="detective.html">
+      <div class="novel-spine"></div>
+      <div class="novel-body">
+        <div class="novel-num">1</div>
+        <div class="novel-info">
+          <span class="novel-tag">オリジナル</span>
+          <div class="novel-title">探偵</div>
+          <div class="novel-desc">タイトル・あらすじをここに入れてください</div>
+        </div>
+        <span class="novel-arrow">›</span>
+      </div>
+    </a>
+
+    <div class="novel-card soon">
+      <div class="novel-spine"></div>
+      <div class="novel-body">
+        <div class="novel-num">2</div>
+        <div class="novel-info">
+          <span class="novel-tag">オリジナル</span>
+          <div class="novel-title">タイトル未定 <span class="soon-badge">coming soon</span></div>
+          <div class="novel-desc">準備中</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="novel-card soon">
+      <div class="novel-spine"></div>
+      <div class="novel-body">
+        <div class="novel-num">3</div>
+        <div class="novel-info">
+          <span class="novel-tag">オリジナル</span>
+          <div class="novel-title">タイトル未定 <span class="soon-badge">coming soon</span></div>
+          <div class="novel-desc">準備中</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <a class="back-link" href="gallery.html">← Gallery に戻る</a>
+</main>
+
+<footer>
+  <p>© 2026 The Violet Question &nbsp;|&nbsp; <a href="about.html">About</a> &nbsp;|&nbsp; Fan Site — 非公式</p>
+  <p>当サイトのオリジナルコンテンツのAI学習利用を禁止します。</p>
+</footer>
+
+</body>
+</html>
