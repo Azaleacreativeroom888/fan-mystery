@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery — The Violet Question</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Noto+Serif+JP:wght@300;400&family=Courier+Prime&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #EDE8F5;
+      --bg-card: #F5F0FF;
+      --main:    #C9B8E8;
+      --mid:     #8B6BB1;
+      --deep:    #2D1B4E;
+      --ink:     #3D2B5E;
+      --muted:   #9A87B8;
+      --accent:  #D4A9FF;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      line-height: 1.9;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--deep);
+      padding: 2.2rem 2rem;
+      text-align: center;
+    }
+    .site-eyebrow {
+      font-family: 'Courier Prime', monospace;
+      color: var(--main);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .site-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .site-title span { color: var(--accent); font-style: italic; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--deep);
+      border-top: 1px solid rgba(201,184,232,0.15);
+      display: flex;
+      justify-content: center;
+    }
+    nav a {
+      color: var(--main);
+      text-decoration: none;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 1.6rem;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, background 0.2s;
+    }
+    nav a:hover, nav a.active {
+      color: #fff;
+      border-bottom-color: var(--accent);
+      background: rgba(201,184,232,0.06);
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2.8rem 1.5rem 4rem;
+    }
+
+    /* ── PAGE HEADING ── */
+    .page-heading {
+      margin-bottom: 2rem;
+    }
+    .page-heading h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      color: var(--deep);
+      font-weight: 400;
+    }
+    .rule {
+      margin-top: 0.7rem;
+      height: 1px;
+      background: linear-gradient(to right, var(--mid), transparent);
+    }
+
+    /* ── FILTER TABS ── */
+    .filter-tabs {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .tab {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border: 1px solid rgba(139,107,177,0.3);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab:hover {
+      border-color: var(--mid);
+      color: var(--mid);
+    }
+    .tab.active {
+      background: var(--deep);
+      border-color: var(--deep);
+      color: var(--main);
+    }
+
+    /* ── GALLERY GRID ── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+
+    /* ── GALLERY ITEM ── */
+    .gallery-item {
+      background: var(--bg-card);
+      border: 1px solid rgba(139,107,177,0.18);
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .gallery-item:hover {
+      border-color: var(--mid);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(45,27,78,0.1);
+    }
+
+    .gallery-thumb {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background: var(--deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 画像が入ったとき用 */
+    .gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 画像がないときのプレースホルダー */
+    .thumb-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      height: 100%;
+      color: rgba(201,184,232,0.2);
+    }
+    .thumb-placeholder .ph-q {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      font-style: italic;
+      line-height: 1;
+    }
+    .thumb-placeholder .ph-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(201,184,232,0.3);
+    }
+
+    .gallery-info {
+      padding: 0.8rem 0.9rem;
+    }
+    .gallery-tag {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      background: rgba(139,107,177,0.1);
+      padding: 0.1em 0.5em;
+      display: inline-block;
+      margin-bottom: 0.3rem;
+    }
+    .gallery-title {
+      font-size: 0.82rem;
+      color: var(--deep);
+      line-height: 1.5;
+    }
+    .gallery-date {
+      margin-top: 0.3rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20,10,40,0.92);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .lightbox.open { display: flex; }
+
+    .lightbox-inner {
+      position: relative;
+      max-width: 700px;
+      width: 100%;
+    }
+    .lightbox-img {
+      width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* 画像なしのlightbox表示 */
+    .lightbox-placeholder {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      max-height: 70vh;
+      background: var(--deep);
+      border: 1px solid rgba(201,184,232,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .lightbox-placeholder .lp-q {
+      font-family: 'Playfair Display', serif;
+      font-size: 6rem;
+      font-style: italic;
+      color: rgba(201,184,232,0.15);
+      line-height: 1;
+    }
+    .lightbox-placeholder .lp-text {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+    }
+
+    .lightbox-caption {
+      margin-top: 1rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.7rem;
+    }
+    .lightbox-caption .lc-tag {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      background: rgba(139,107,177,0.15);
+      padding: 0.1em 0.5em;
+    }
+    .lightbox-caption .lc-title {
+      font-size: 0.9rem;
+      color: #fff;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -2.5rem;
+      right: 0;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .lightbox-close:hover { color: #fff; }
+
+    @media (max-width: 500px) {
+      nav { flex-wrap: wrap; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep);
+      color: var(--muted);
+      text-align: center;
+      padding: 2rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      line-height: 2;
+    }
+    footer a { color: var(--main); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="site-eyebrow">Mystery Fan Site</p>
+  <h1 class="site-title">The <span>Violet</span> Question</h1>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="blog.html">Blog</a>
+  <a href="ranking.html">Ranking</a>
+  <a href="gallery.html" class="active">Gallery</a>
+  <a href="about.html">About</a>
+</nav>
+
+<main>
+  <div class="page-heading">
+    <h2>Gallery</h2>
+    <div class="rule"></div>
+  </div>
+
+  <!-- フィルタータブ -->
+  <div class="filter-tabs">
+    <button class="tab active" data-filter="all">All</button>
+    <button class="tab" data-filter="manga">漫画</button>
+    <button class="tab" data-filter="illust">イラスト</button>
+    <button class="tab" data-filter="column">コラム</button>
+  </div>
+
+  <!-- ギャラリーグリッド -->
+  <div class="gallery-grid" id="gallery">
+
+    <div class="gallery-item" data-category="manga" data-title="タイトルを入れてください" data-tag="漫画" onclick="openLightbox(this)">
+      <div class="gallery-thumb">
+        <!-- <img src="images/manga01.jpg" alt="作品タイトル"> -->
+        <div class="thumb-placeholder">
+          <span class="ph-q">？</span>
+          <span class="ph-label">manga</span>
+        </div>
+      </div>
+      <div class="gallery-info">
+        <span class="gallery-tag">漫画</span>
+        <div class="gallery-title">タイトルを入れてください</div>
+        <div class="gallery-date">2026.06.01</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="illust" data-title="タイトルを入れてください" data-tag="イラスト" onclick="openLightbox(this)">
+      <div class="gallery-thumb">
+        <!-- <img src="images/illust01.jpg" alt="作品タイトル"> -->
+        <div class="thumb-placeholder">
+          <span class="ph-q">？</span>
+          <span class="ph-label">illust</span>
+        </div>
+      </div>
+      <div class="gallery-info">
+        <span class="gallery-tag">イラスト</span>
+        <div class="gallery-title">タイトルを入れてください</div>
+        <div class="gallery-date">2026.05.20</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="column" data-title="タイトルを入れてください" data-tag="コラム" onclick="openLightbox(this)">
+      <div class="gallery-thumb">
+        <!-- <img src="images/column01.jpg" alt="作品タイトル"> -->
+        <div class="thumb-placeholder">
+          <span class="ph-q">？</span>
+          <span class="ph-label">column</span>
+        </div>
+      </div>
+      <div class="gallery-info">
+        <span class="gallery-tag">コラム</span>
+        <div class="gallery-title">タイトルを入れてください</div>
+        <div class="gallery-date">2026.05.10</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="manga" data-title="タイトルを入れてください" data-tag="漫画" onclick="openLightbox(this)">
+      <div class="gallery-thumb">
+        <div class="thumb-placeholder">
+          <span class="ph-q">？</span>
+          <span class="ph-label">manga</span>
+        </div>
+      </div>
+      <div class="gallery-info">
+        <span class="gallery-tag">漫画</span>
+        <div class="gallery-title">タイトルを入れてください</div>
+        <div class="gallery-date">2026.04.25</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="illust" data-title="タイトルを入れてください" data-tag="イラスト" onclick="openLightbox(this)">
+      <div class="gallery-thumb">
+        <div class="thumb-placeholder">
+          <span class="ph-q">？</span>
+          <span class="ph-label">illust</span>
+        </div>
+      </div>
+      <div class="gallery-info">
+        <span class="gallery-tag">イラスト</span>
+        <div class="gallery-title">タイトルを入れてください</div>
+        <div class="gallery-date">2026.04.10</div>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="column" data-title="タイトルを入れてください" data-tag="コラム" onclick="openLightbox(this)">
+      <div class="gallery-thumb">
+        <div class="thumb-placeholder">
+          <span class="ph-q">？</span>
+          <span class="ph-label">column</span>
+        </div>
+      </div>
+      <div class="gallery-info">
+        <span class="gallery-tag">コラム</span>
+        <div class="gallery-title">タイトルを入れてください</div>
+        <div class="gallery-date">2026.03.30</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()">✕ Close</button>
+    <div id="lightbox-content"></div>
+    <div class="lightbox-caption">
+      <span class="lc-tag" id="lightbox-tag"></span>
+      <span class="lc-title" id="lightbox-title"></span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 The Violet Question &nbsp;|&nbsp; <a href="about.html">About</a> &nbsp;|&nbsp; Fan Site — 非公式</p>
+  <p>当サイトのオリジナルコンテンツのAI学習利用を禁止します。</p>
+</footer>
+
+<script>
+  // ── フィルター ──
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.dataset.filter;
+      document.querySelectorAll('.gallery-item').forEach(item => {
+        item.style.display = (filter === 'all' || item.dataset.category === filter) ? '' : 'none';
+      });
+    });
+  });
+
+  // ── ライトボックス ──
+  function openLightbox(el) {
+    const img = el.querySelector('img');
+    const title = el.dataset.title;
+    const tag = el.dataset.tag;
+
+    const content = document.getElementById('lightbox-content');
+    if (img) {
+      content.innerHTML = `<img class="lightbox-img" src="${img.src}" alt="${title}">`;
+    } else {
+      content.innerHTML = `
+        <div class="lightbox-placeholder">
+          <span class="lp-q">？</span>
+          <span class="lp-text">image coming soon</span>
+        </div>`;
+    }
+
+    document.getElementById('lightbox-title').textContent = title;
+    document.getElementById('lightbox-tag').textContent = tag;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox(e) {
+    if (!e || e.target === document.getElementById('lightbox') || e.currentTarget.tagName === 'BUTTON') {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
+
+</body>
+</html>
