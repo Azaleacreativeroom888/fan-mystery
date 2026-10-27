@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>探偵 — The Violet Question</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Noto+Serif+JP:wght@300;400&family=Courier+Prime&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #EDE8F5;
+      --bg-card: #F5F0FF;
+      --main:    #C9B8E8;
+      --mid:     #8B6BB1;
+      --deep:    #2D1B4E;
+      --ink:     #3D2B5E;
+      --muted:   #9A87B8;
+      --accent:  #D4A9FF;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      line-height: 1.9;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--deep);
+      padding: 2.2rem 2rem;
+      text-align: center;
+    }
+    .site-eyebrow {
+      font-family: 'Courier Prime', monospace;
+      color: var(--main);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .site-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .site-title span { color: var(--accent); font-style: italic; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--deep);
+      border-top: 1px solid rgba(201,184,232,0.15);
+      display: flex;
+      justify-content: center;
+    }
+    nav a {
+      color: var(--main);
+      text-decoration: none;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 1.6rem;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, background 0.2s;
+    }
+    nav a:hover, nav a.active {
+      color: #fff;
+      border-bottom-color: var(--accent);
+      background: rgba(201,184,232,0.06);
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* ── タイトルブロック ── */
+    .novel-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(139,107,177,0.2);
+    }
+    .novel-tag {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mid);
+      background: rgba(139,107,177,0.1);
+      padding: 0.15em 0.8em;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .novel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-style: italic;
+      color: var(--deep);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .novel-meta {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .novel-synopsis {
+      margin-top: 1.4rem;
+      font-size: 0.82rem;
+      color: var(--ink);
+      opacity: 0.8;
+      line-height: 1.9;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      font-style: italic;
+    }
+
+    /* ── 本文 ── */
+    .novel-body {
+      font-size: 1rem;
+      line-height: 2.1;
+      color: var(--ink);
+    }
+
+    /* 章タイトル */
+    .chapter {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--deep);
+      margin: 3rem 0 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .chapter::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--mid);
+      flex-shrink: 0;
+    }
+    .chapter::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(139,107,177,0.3), transparent);
+    }
+
+    /* 段落 */
+    .novel-body p {
+      margin-bottom: 1.4em;
+      text-indent: 1em;
+    }
+
+    /* 会話文 */
+    .novel-body p.dialog {
+      text-indent: 0;
+      padding-left: 0.5em;
+      border-left: 2px solid rgba(139,107,177,0.2);
+      margin-left: 0.5rem;
+    }
+
+    /* 区切り */
+    .scene-break {
+      text-align: center;
+      color: rgba(139,107,177,0.4);
+      font-size: 0.8rem;
+      letter-spacing: 0.4em;
+      margin: 2.5rem 0;
+      user-select: none;
+    }
+
+    /* ── 奥付 ── */
+    .colophon {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(139,107,177,0.2);
+      text-align: center;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      line-height: 2;
+    }
+
+    /* ── BACK LINK ── */
+    .back-link {
+      display: inline-block;
+      margin-top: 2rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(139,107,177,0.3);
+      padding-bottom: 0.1em;
+    }
+    .back-link:hover { color: var(--deep); border-bottom-color: var(--deep); }
+
+    @media (max-width: 500px) {
+      nav { flex-wrap: wrap; }
+      .novel-body { font-size: 0.95rem; }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep);
+      color: var(--muted);
+      text-align: center;
+      padding: 2rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      line-height: 2;
+    }
+    footer a { color: var(--main); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="site-eyebrow">Mystery Fan Site</p>
+  <h1 class="site-title">The <span>Violet</span> Question</h1>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="blog.html">Blog</a>
+  <a href="ranking.html">Ranking</a>
+  <a href="gallery.html" class="active">Gallery</a>
+  <a href="about.html">About</a>
+</nav>
+
+<main>
+
+  <!-- タイトルブロック -->
+  <div class="novel-header">
+    <span class="novel-tag">オリジナル小説</span>
+    <h1 class="novel-title">探偵</h1>
+    <div class="novel-meta">
+      <span>著：Azalea72</span>
+      <span>2026.10.27 公開</span>
+    </div>
+    <p class="novel-synopsis">
+      共演してた女優が殺された。犯人はこの５人のなかにいる………？
+    </p>
+  </div>
+
+  <!-- 本文 -->
+  <div class="novel-body">
+
+    <div class="chapter">一</div>
+
+    <p>ある劇場で殺人事件が起こった。ヒロインの女優が舞台上で倒れた。まだ公演は５分しか始まってないのに。</p>
+
+      <p>「この中に犯人がいる」探偵が指をさして言った。</p>
+
+      <p>「ここには５人の俳優がいる。この女優が殺された時、ここにいたのは君たちだけだ。犯人はこの中にいるだろう。俺は天才探偵……その名を速水雄介と言う。お前らも聞いたことあると思うが」探偵がつらつら自慢話をしている。</p>
+
+      <p>この舞台を見つめる観客の視線が痛い。</p>
+
+      <p>「あの……あなたは誰ですか？」気が弱そうな女優が言った。</p>
+
+      <p>「通りすがりの探偵です」</p>
+
+      <p class="monologue">（どう見ても観客だろ）俳優の中の一人である田中宗次郎は思った。</p>
+
+      <p>「さっき勝手に壇上に上がってきたよね？　なんか怪しい人よ」気が強そうな女優が、気が弱そうな女優に向かってコソコソ話している。</p>
+
+      <p>犯人と疑われた役者の５人は顔を見合わせて気まずそうにしている。</p>
+
+      <p class="monologue">（そう。この女優を殺したのはこの俺だ）田中宗次郎はヒロインの女優を殺したのは自分だとそう確信している。なぜなら本番前に殺された女優に嫌がらせをしたのだ。宗次郎は彼女を稽古が始まったときから嫌っていた。</p>
+
+      <p class="monologue">（殺される前にこいつが俺になにをしてきたか。ここにいる全員に伝えて、俺は自首するつもりだ。こいつが俺にしてきた仕打ちの数々をネットに上げれば評判はガタ落ちだろう）</p>
+
+      <p>探偵が話し始めた。「そこで俺が怪しんでいるのは、田中宗次郎。君だ。ここの劇団は主人公がヒロインにスウィーツの贈り物をする慣習がある。そこでヒロインのこの女優の楽屋に行って二人きりになったときに、持って行ったチョコレートケーキに毒を持って殺したんだ」</p>
+
+      <p class="monologue">（そう俺は毒物を盛ったのだ）</p>
+
+      <p>「探偵の言う通り。実は俺が……」</p>
+
+      <p>「私がやりました」気が強いことで有名な女優の吉田成美が言った。</p>
+
+      <p class="monologue">（えぇ！！！！　別のヤツが名乗り出た！）</p>
+
+      <p>「ほう、では、なぜ君は彼女を殺したのかな？　吉田成美さん」</p>
+
+      <p>吉田成美は顎を上げて言った。「私は彼女にヒロイン役を取られたのよ。ただ顔がロリ顔って理由で。悔しかったわ」</p>
+
+      <p>「それだけですか？」</p>
+
+      <p>「そうよ！　あのロリクソアバズレスーパーハイパークソビチクソ」</p>
+
+      <p class="monologue">（長い呼び名だな）</p>
+
+      <p>「だから、リハーサル前に楽屋からでてきたところで、具合が悪いって言ってたから、留めにメリケンサックであいつの整形顔を殴ってやったのよ。自慢のロリ顔にね！！」</p>
+
+      <p class="monologue">（メリケンサック！）</p>
+
+      <p>「それは重要な証言だ。それで死んだ可能性が高い」</p>
+
+      <p class="monologue">（メリケンサックで死なないだろ）田中宗次郎が思った。（そろそろ俺がやったと言おう）</p>
+
+      <p>「俺が……」宗次郎が言いかけた。</p>
+
+      <p>「俺がやった。こいつじゃない……」坊主頭の真面目そうな中丸信二が言った。</p>
+
+      <p class="monologue">（え、お前？？？？？？？）</p>
+
+      <p>「ほう、俳優もやりながらマネージャーもやっている中丸信二さん。あなたが殺したのかな？」</p>
+
+      <p>「チッ。あいつ、チョコレートケーキ貰って一口頂戴って言ったのにくれなかったんだ。有名な菓子だったから食べたかったのに……」中丸信二の目が鋭くなった。</p>
+
+      <p class="monologue">（くだらね！　しかも、それを食べてたらお前が毒を食べてたことになるぞ）</p>
+
+      <p>「それが動機ですね」探偵は顎に手を当てた。</p>
+
+      <p>「ああ。だからあいつの腹をバターナイフで刺してやったんだ」</p>
+
+      <p class="monologue">（バターナイフ！？　ちっさ！　致命傷にならないだろ）宗次郎の顔が引きつった。</p>
+
+      <p>「それは致命傷になりますね。あなたが真犯人だ」探偵は勢いよく中丸信二を指さした。</p>
+
+      <p class="monologue">（そんなわけないだろ！　そろそろ俺が言うぞ！！　言うからな！）宗次郎の額に汗が垂れる。</p>
+
+      <p>「実は俺が……」</p>
+
+      <p>「私がやりました」気が弱そうで眼鏡をかけている鈴木さなが言った。</p>
+
+      <p class="monologue">（また！？　ちょっと黙ってろよ！！！）</p>
+
+      <p>「なにか動機がありますかな？　鈴木さなさん」</p>
+
+      <p>「だって、ヒロインで才能もあって、ちくびもピンクなんて、許せない！　お腹を抱えて廊下を歩いていたところに殺鼠剤を背中にかけてやったんです！　今思えばお腹を抱えてたのはお腹を刺されていたからかも。ふん、いい気味」</p>
+
+      <p class="monologue">（嫌がらせとかする性格だったのか……なんかショック。しかも殺鼠剤を飲ませたわけじゃないのかよ！）</p>
+
+      <p>「それで彼女は死んだのか……真犯人がそろそろ分かってきたな……」探偵は真剣な顔をしているがどこか笑っている気もした。</p>
+
+      <p class="monologue">（……結局みんな嫌がらせをしてたんじゃないか。もしかして最後の一人も……）宗次郎がちらっと横を見た。</p>
+
+      <p>「俺を忘れるなよ！　俺が殺したんだ！！！　こいつは俺の出っ歯を笑ったんだ。だから舞台から突き落としてやったんだ」</p>
+
+      <p class="monologue">（でもここの舞台って床から150センチメートルしかないけど）</p>
+
+      <p>「それは酷い……五十嵐昭！　あなたが致命傷をあたえたのか！」探偵がワクワクしているように見えた。</p>
+
+      <p>「お前ら本当に酷いな！　そんなんで殺せるわけないだろ！」宗次郎がヒステリックに怒りだした。「探偵だって言うのになんの推理もしないし！」</p>
+
+      <p>「お前だって下剤をチョコレートケーキに入れたろ。俺観てたからな」五十嵐昭が言った。</p>
+
+      <p>「サイテー。私たちのこと酷いとか言ってたのに自分だってやってるじゃん」吉田成美が言った。</p>
+
+      <p>「こいつどうせ、主人公役で舞い上がってて、ヒロインに思わせぶりな態度取られて下剤盛ったんだぜ。多分」中丸信二が言った。</p>
+
+      <p>「下剤なんかで死ぬわけないじゃんね」鈴木さなが言った。</p>
+
+      <p class="monologue">（バラされた！！　ここで恨み節を言ってやる！　そしてネットにすべて晒してやる！）宗次郎が携帯を出しかけた。</p>
+
+      <p>「お前ら黙ってろよ！！！！　見てみろ！　こいつは俺に思わせぶりなメールを……」宗次郎が叫ぶ。観客が息をのんだ。</p>
+
+      <p>「お前ら動くな」バンと音がすると劇場の入り口のドアから警察が入ってきた。「速水雄介。お前を連行する。五時二十分。速水雄介逮捕ォ」太った女性の警官が言った。観客がドキドキしながらこの状況を見守っていた。女性警官は舞台に上がった。</p>
+
+      <p>「「「え！？」」」一同に声を発した。</p>
+
+      <p>「な、なんでですか？」</p>
+
+      <p>「それは俺が……」速水雄介が話をしようとすると警官に遮られた。女性警官が速水雄介に手錠をかける。</p>
+
+      <p>「速水雄介はこの女優のストーカーで有名だった。告白したらしいが、フラれたらしい。一般人とは付き合わないと。この女優からも被害の電話がいくつか届いている」</p>
+
+      <p>「この人たちもこの女優を殺害しようとしてたってさっき告白しましたよ」</p>
+
+      <p>「そうなのか？」警察が５人の俳優に聞いた。</p>
+
+      <p>「「「いえ、私たちはやってません」」」５人は顔を見合わせて犯行を否定した。</p>
+
+      <p>この舞台は口コミで最高の評価を得られた。どうやら観客はこの逮捕劇を演技だと思っていたようだ。</p>
+
+  </div>
+
+  <!-- 奥付 -->
+  <div class="colophon">
+    <p>探偵</p>
+    <p>初出：The Violet Question &nbsp;／&nbsp; 2026年6月</p>
+    <p>© 2026 サイト管理人 — 無断転載・AI学習利用禁止</p>
+  </div>
+
+  <a class="back-link" href="report1.html">← 小説一覧に戻る</a>
+
+</main>
+
+<footer>
+  <p>© 2026 The Violet Question &nbsp;|&nbsp; <a href="about.html">About</a> &nbsp;|&nbsp; Fan Site — 非公式</p>
+  <p>当サイトのオリジナルコンテンツのAI学習利用を禁止します。</p>
+</footer>
+
+</body>
+</html>
